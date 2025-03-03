@@ -1,9 +1,11 @@
 from bs4 import BeautifulSoup
+import requests
 
-with open("website.html") as file:
-    contents = file.read()
-
-soup = BeautifulSoup(contents, "html.parser")
+#_______________________
+# with open("website.html") as file:
+#     contents = file.read()
+#
+# soup = BeautifulSoup(contents, "html.parser")
 # print(soup.title)
 # print(soup.title.name)
 # print(soup.title.string)
@@ -30,6 +32,35 @@ soup = BeautifulSoup(contents, "html.parser")
 
 # headings = soup.select(selector=".heading")
 # print(headings)
+
+response = requests.get("https://appbrewery.github.io/news.ycombinator.com/")
+yc_web_page = response.text
+
+soup = BeautifulSoup(yc_web_page, "html.parser")
+
+articles = soup.find_all(name="a", class_="storylink")
+article_texts = []
+article_links = []
+for article_tag in articles:
+    text = article_tag.get_text()
+    article_texts.append(text)
+    link = article_tag.get("href")
+    article_links.append(link)
+
+articles_upvotes = [int(item.getText().split()[0]) for item in soup.find_all(name="span", class_="score")]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
